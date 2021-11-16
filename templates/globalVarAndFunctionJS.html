@@ -1,0 +1,25 @@
+<script>
+function empty(e) {
+    switch (e) {
+      case "":
+      case 0:
+      case "0":
+      case null:
+      case false:
+      case typeof(e) == "undefined":
+        return true;
+      default:
+        return false;
+    }
+}
+
+var plot_config = {"toImageButtonOptions":{
+    "format":"png",
+    "filename":"BullishCloud",
+    "scale":1
+    },
+    "modeBarButtonsToAdd":["drawline","drawopenpath","drawclosedpath","drawcircle","drawrect","eraseshape"], 
+    "scrollZoom": true,
+    "responsive": true
+}
+</script>

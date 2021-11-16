@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="row">
+		<div class="col">
+			<div class="white_card">
+				<div class="white_card_header p-3">
+					<div class="p-0 d-flex justify-content-around flex-wrap">
+						<div class="chartinput-row w-100">
+							<div class="chartinput-col-4">
+								<select type="text" class="form-control select2 w-100" name="Chartexchange" id="Chartexchange">
+									<option value="">--Exchange--</option>
+									{%for exchange in response.exchange%}
+										<option value={{exchange}}>{{exchange}}</option>
+									{%endfor%}
+								</select>
+							</div>
+							<div class="chartinput-col-4">
+								<select type="text" class="form-control select2 w-100" name="Charttickers" id="Charttickers">
+									<option value="">--Tickers--</option>
+									{%for tickers in response.tickers%}
+										<option value={{tickers}}>{{tickers}}</option>
+									{%endfor%}
+								</select>
+							</div>
+							<div class="chartinput-col-4">
+								<select type="text" class="form-control select2 w-100" name="Chartintervals" id="Chartintervals">
+									<option value="">--Intervals--</option>
+									{%for intervals in response.intervals%}
+										<option value={{intervals}}>{{intervals}}</option>
+									{%endfor%}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="p-0 d-flex justify-content-around flex-wrap">
+						<div class="chartinput-row w-100">
+							<div class="chartinput-col-4">
+								<label for="ChartstartDate">Start Date-Time</label>
+								<input type="datetime-local" class="form-control" name="ChartstartDate" id="ChartstartDate">
+							</div>
+							<div class="chartinput-col-4">
+								<label for="ChartendDate">End Date-Time</label>
+								<div class="input-group mb-3">
+									<input type="datetime-local" class="form-control" name="ChartendDate" id="ChartendDate" aria-describedby="buttonRealTime">
+									<div class="input-group-append">
+										<button class="btn btn btn-outline-primary" type="button" name="buttonRealTime" id="buttonRealTime"><i class="ti-timer"></i> Realtime</button>
+									</div>
+								</div>
+							</div>
+							<div class="chartinput-col-2">
+								<label for="ChartuserTimezone">Time Zone</label>
+								<select type="text" class="form-control select2" name="ChartuserTimezone" id="ChartuserTimezone">
+									<option value='default'>--Default--</option>
+									{%for userTimezone in range (12,-13,-1)%}
+										<option value={{userTimezone}}>{{'%+d' % userTimezone}}</option>
+									{%endfor%}
+								</select>
+							</div>
+							<div class="chartinput-col-2 text-right">
+								<button type="button" class="btn btn-outline-primary rounded-pill reload-button" name="Chartrefresh" id="Chartrefresh"><i class="ti-reload"></i> Generate</button>
+							</div>
+						</div>
+					</div>
+					<div id="errormsg" style="display:none;">
+						<div class="alert text-white bg-danger d-flex align-items-center justify-content-between" role="alert">
+							<div class="alert-text" id="errortxt"></div>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<i class="ti-close text-white f_s_14"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="white_card_body p-0">
+					<div id="homeChart"></div>
+					<div id="loadingScreen" class="loadingScreen" style="display:none">
+						<div class="loader--grid colord_bg_1">
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function renderChart(graphDiv,response){
+			plot_json = JSON.parse(response["plot_json"]);
+			plot_data = plot_json["data"];
+			plot_layout = plot_json["layout"];
+			Plotly.setPlotConfig(plot_config);
+			Plotly.react(graphDiv, plot_data, plot_layout,{});
+			$('#loadingScreen').fadeOut("slow");
+			$('#'+graphDiv).css("opacity","");
+		}
+
+		function showerrormsg(StatusCode,textStatus,errorThrown){
+			$('#errormsg').fadeIn("slow");
+			$('#errortxt').html(StatusCode+" "+textStatus+" "+errorThrown);
+			$('#loadingScreen').fadeOut("slow");
+			$('#'+graphDiv).css("opacity","");
+		}
+	</script>
+	<script>
+		$('#buttonRealTime').click(function(){
+			$("#ChartendDate").val("");
+		});
+
+		$(document).ready(function(){
+			graphDiv = "homeChart";
+			userTimezone = -new Date().getTimezoneOffset()/60;
+			$.ajax({
+				method:'POST',
+				url: window.location.origin+'/datawhaleChart',
+				dataType:'json',
+				contentType:'application/json',
+				data: JSON.stringify({"exchange":"","ticker":"","interval":"","startDate":"","endDate":"","userTimezone":userTimezone}),
+				beforeSend: function(){
+					$('#loadingScreen').fadeIn("slow");
+					$('#'+graphDiv).css("opacity",".1");
+				},
+				success: function(response){
+					renderChart(graphDiv,response);
+				},
+				error: function(xhr,textStatus,errorThrown){
+					showerrormsg(xhr.status,textStatus,errorThrown)
+				}
+			});
+		});
+
+		$('#Chartrefresh').click(function(){
+			$('#errormsg').fadeOut("slow");
+			graphDiv = "homeChart";
+			exchange = $("#Chartexchange").val();
+			ticker = $("#Charttickers").val();
+			interval = $("#Chartintervals").val();
+			startDate = $("#ChartstartDate").val();
+			endDate = $("#ChartendDate").val();
+			userTimezone = $("#ChartuserTimezone").val();
+			if (userTimezone=="default"){
+				userTimezone = -new Date().getTimezoneOffset()/60;
+			}
+			console.log(userTimezone);
+
+			if (startDate > endDate && !empty(startDate) && !empty(endDate)){
+				showerrormsg(0,"invalid input","START DATE-TIME SHOULD BE EARLIER THAN END DATE-TIME")
+			} else {
+				$.ajax({
+					method:'POST',
+					url: window.location.origin+'/datawhaleChart',
+					dataType:'json',
+					contentType:'application/json',
+					data: JSON.stringify({
+						"exchange":exchange,
+						"ticker":ticker,
+						"interval":interval,
+						"startDate":startDate,
+						"endDate":endDate,
+						"userTimezone":userTimezone,
+					}),
+					beforeSend: function(){
+						$('#loadingScreen').fadeIn("slow");
+						$('#homeChart').css("opacity",".1");
+					},
+					success: function(response){
+						renderChart(graphDiv,response);
+					},
+					error: function(xhr,textStatus,errorThrown){
+						showerrormsg(xhr.status,textStatus,errorThrown)
+					}
+				});
+			}
+		});
+	</script>
+{% endblock content %}

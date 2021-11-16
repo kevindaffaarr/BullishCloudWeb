@@ -1,0 +1,158 @@
+
+
+.default-datepicker{
+    .datepicker-inline {
+        .datepicker .datepicker--nav .datepicker--nav-action {
+            display: none;
+        }
+        .datepicker .datepicker--content .datepicker--days .datepicker--days-names {
+            margin: 33px 0 20px;
+            padding: 15px 0;
+            background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(rgba(255,255,255,0.05)), to(transparent));
+            background-image: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            -webkit-box-shadow: 0 0 5px 5px rgba(0,0,0,0.01);
+            box-shadow: 0 0 5px 5px rgba(0,0,0,0.01);
+        }
+        .datepicker {
+            width: auto;
+            background: rgba(0,0,0,0);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            padding: 0;
+            .datepicker--content .datepicker--days .datepicker--days-names .datepicker--day-name {
+                color: rgba(255,255,255,0.6);
+                font-size: 14px;
+                font-family: $font_style_1;
+            }
+            .datepicker--content .datepicker--days .datepicker--cells .datepicker--cell-day.-other-month- {
+                color: rgba(255,255,255,0.6);
+            }
+            .datepicker--content .datepicker--days .datepicker--cells .datepicker--cell {
+                font-weight: 700;
+            }
+            .datepicker--content .datepicker--days .datepicker--cells .datepicker--cell-day {
+                height: 51px;
+                color: #fff;
+            }
+            .datepicker--nav-title {
+                color: #fff;
+                font-size: 22px;
+                font-weight: 700;
+                font-family: $font_style_1;
+            }
+            .datepicker--nav-title {
+                border-radius: 8px;
+                padding: 0 8px;
+            }
+            .datepicker--nav {
+                border-bottom: none;
+                padding: 0;
+                text-transform: capitalize;
+                margin-top: -12px;
+            }
+            .datepicker--nav-title i {
+                color: #fff;
+                margin-left: 30px;
+                font-weight: 100;
+                font-size: 30px;
+                font-family: $font_style_1;
+            }
+            .datepicker--day-name {
+                color: #000;
+                font-weight: bold;
+            }
+        }
+    }
+    .datepicker--days-names {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 8px 0 3px;
+    }
+    .datepicker--cells {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    .datepicker--cell-day {
+        width: 14.28571%;
+        height: 34px;
+    }
+    .datepicker--cell {
+        border-radius: 38%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        position: relative;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        height: 32px;
+        z-index: 1;
+    }
+    .datepicker--nav-title, .datepicker--nav-action {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    .datepicker--cell.-current- {
+        color: #000;
+        border-radius: 38%;
+        font-weight: bold;
+        border: 2px solid #fff;
+    }
+    .datepicker--cell.-focus- {
+        background: rgba(255, 255, 255,.50);
+        border: 2px solid #fff;
+    }
+}
+
+.datepicker--cell-day.-other-month-, .datepicker--cell-year.-other-decade- {
+    color: #dedede;
+}
+
+.date_picker_wrapper{
+    padding: 0;
+    padding: 45px 50px;
+    box-shadow: 0 12px 30px rgba(46, 71, 101,.10);
+    border-radius: 15px;
+    background: #FF4409;
+}
+
+.datepicker--cell.-selected- {
+    color: #000 !important;
+    border: none;
+    background: #fff;
+}
+.datepicker--cell.-selected-.-current- {
+    color: #000 !important;
+    border: none;
+    background: #fff;
+}
+
+.default-datepicker .datepicker-inline .datepicker .datepicker--content .datepicker--days .datepicker--cells .datepicker--cell.-selected- {
+    background: #fff;
+    color: #7e37d8;
+    border-radius: 38%;
+    position: relative;
+}
+
+

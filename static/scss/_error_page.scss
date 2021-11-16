@@ -1,0 +1,35 @@
+.erroe_page_wrapper{
+    .errow_wrap{
+        display: flex;
+        padding: 40px 0;
+        align-items: center;
+        justify-content: center;
+        img{
+            width: 100px;
+            margin: auto;
+        }
+        .error_heading{
+            margin-top: 60px;
+            h3{
+                &.headline{
+                    font-size: 200px;
+                    font-weight: 800;
+                    line-height: 1;
+                    @media #{$tab} {
+                        font-size: 120px;
+                    }
+                }
+            }
+        }
+        p{
+            font-size: 18px;
+            letter-spacing: 1px;
+            color: #000;
+            font-weight: 400;
+            margin-top: 30px;
+            line-height: 35px;
+            margin-bottom: 30px;
+        }
+    }
+}
+
